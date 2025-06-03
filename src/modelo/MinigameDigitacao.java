@@ -6,35 +6,63 @@ import java.util.Random;
 public class MinigameDigitacao {
     // Palavras por nível de dificuldade
     private static final String[] PALAVRAS_FACIL = {
-        "java", "codigo", "animal", "feliz", "casa", "tempo", "amor", "vida"
+        "java", "codigo", "animal", "feliz", "casa", "tempo", "amor", "vida",
+        "shrek", "gato", "pato", "bolo", "pizza", "meme", "lol", "noob",
+        "mario", "sonic", "peach", "yoshi", "link", "zelda", "pikachu"
     };
     
     private static final String[] PALAVRAS_MEDIO = {
         "programacao", "tamagochi", "virtual", "energia", "saude", "higiene",
-        "brincar", "dormir", "veterinario", "pontos", "minigame", "digitacao"
+        "brincar", "dormir", "veterinario", "pontos", "minigame", "digitacao",
+        "rapunzel", "minecraft", "creeper", "enderman", "diamond", "redstone",
+        "chicken", "jockey", "zombie", "skeleton", "spider", "blaze", "ghast",
+        "discord", "twitch", "youtube", "instagram", "tiktok", "whatsapp"
     };
     
     private static final String[] PALAVRAS_DIFICIL = {
         "desenvolvimento", "implementacao", "funcionalidade", "performance",
-        "algoritmo", "estrutura", "orientacao", "encapsulamento", "polimorfismo"
+        "algoritmo", "estrutura", "orientacao", "encapsulamento", "polimorfismo",
+        "pneumoultramicroscopicossilicovulcanoconiotico", "otorrinolaringologista",
+        "paralelepipedo", "supercalifragilisticexpialidocious", "anticonstitucionalissimamente",
+        "chicken jockey", "netherite sword", "enchanted golden apple", "enderdragon",
+        "witherstorm", "herobrine", "notch apple", "diamond pickaxe"
     };
     
     private static final String[] FRASES_FACIL = {
         "o gato subiu no telhado",
         "java e facil",
-        "vamos jogar"
+        "vamos jogar",
+        "shrek e vida",
+        "batman vs superman",
+        "mario come cogumelo",
+        "pikachu usa thunderbolt",
+        "link salva zelda",
+        "sonic corre rapido"
     };
     
     private static final String[] FRASES_MEDIO = {
         "programar e divertido e util",
         "tamagochi precisa de cuidados constantes",
-        "digite rapido para ganhar mais pontos"
+        "digite rapido para ganhar mais pontos",
+        "rapunzel rapunzel jogue seu cabelo",
+        "minecraft e o melhor jogo do mundo",
+        "creeper explode e destroi tudo",
+        "chicken jockey e muito raro de encontrar",
+        "discord e melhor que whatsapp",
+        "youtube premium vale a pena",
+        "tiktok vicia demais cara"
     };
     
     private static final String[] FRASES_DIFICIL = {
         "a programacao orientada a objetos facilita o desenvolvimento",
         "implementar funcionalidades complexas requer conhecimento avancado",
-        "algoritmos eficientes melhoram significativamente a performance"
+        "algoritmos eficientes melhoram significativamente a performance",
+        "supercalifragilisticexpialidocious e uma palavra inventada da mary poppins",
+        "pneumoultramicroscopicossilicovulcanoconiotico e a maior palavra do dicionario",
+        "chicken jockey riding skeleton horse with enchanted diamond armor",
+        "herobrine never existed but became minecraft legendary creepypasta folklore",
+        "enderdragon fight requires lots of preparation and enderpeals for movement",
+        "anticonstitucionalissimamente significa de forma anticonstitucional ao extremo"
     };
 
     public static void jogarMinigame(CriaturaVirtual criatura, Scanner scanner) {
