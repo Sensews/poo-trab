@@ -78,14 +78,12 @@ public class MinigameDigitacao {
         System.out.printf("Tempo médio: %.2f segundos\n", tempoMedio);
         
         int pontosGanhos = calcularPontos(acertos, totalRodadas, tempoMedio);
-        
-        if (pontosGanhos > 0) {
-            criatura.adicionarPontos(pontosGanhos);
+          if (pontosGanhos > 0) {
+            criatura.ganharPontos(pontosGanhos);
             System.out.println("🎉 Você ganhou " + pontosGanhos + " pontos!");
             
             // Pequeno bônus para a criatura por jogar
-            criatura.felicidade = Math.min(100, criatura.felicidade + 5);
-            criatura.afeto = Math.min(100, criatura.afeto + 2);
+            criatura.setFelicidade(Math.min(100, criatura.getFelicidade() + 5));
             criatura.atualizarHumor();
             
             System.out.println(criatura.getNome() + " ficou feliz vendo você jogar!");

@@ -1,216 +1,343 @@
-//parte JP
 package modelo;
 
-// Serializable é uma interface que permite que a classe seja serializada (ou seja, convertida em um fluxo de bytes) para que possa ser salva em um arquivo.
-import java.io.Serializable;
+import java.util.Scanner;
+import java.util.Random;
 
-public abstract class CriaturaVirtual implements Serializable {
-    protected String nome; // Nome do bixo
-    protected int idade; // A idade do bixo, ao chegar em certa idade ele 💀
-    protected int fome; // Quanto maior, mais fome, se chegar em 100 ele 💀
-    protected int saude; // Quanto maior, mais saude, se chegar em 0 ele 💀
-    protected int energia; // Quanto maior, mais energia, se chegar em 15 ele fica exausto
-    protected int higiene; // Quanto maior, mais limpo, se chegar em 25 ele fica sujo
-    protected int felicidade; // Quanto maior, mais feliz, se chegar em 25 ele fica triste
-    protected int afeto; // vínculo com o dono
-    protected boolean doente; // Se o bixo estiver doente, ele não pode brincar, comer ou fazer nada
-    protected String humor; //Ex: "Feliz", "Cansado", "Com Fome", "Triste", "Morto"
-    protected int pontos; // Pontos ganhos em minigames para usar na loja
-    protected boolean vivo; // Se ainda está vivo    //construtor
+public abstract class CriaturaVirtual {
+    protected String nome;
+    protected int fome; // 0-100 (0 = com fome, 100 = satisfeito)
+    protected int sede; // 0-100 (0 = com sede, 100 = satisfeito)
+    protected int sono; // 0-100 (0 = cansado, 100 = descansado)
+    protected int felicidade; // 0-100 (0 = triste, 100 = feliz)
+    protected int saude; // 0-100 (0 = doente, 100 = saudável)
+    protected boolean vivo;
+    protected String humor;
+    protected int pontos; // Pontos para comprar na loja
+    protected Inventario inventario;
+    protected boolean doente;
+    protected String tipoDoenca;
+
     public CriaturaVirtual(String nome) {
         this.nome = nome;
-        this.idade = 0;
-        this.fome = 0;
-        this.saude = 100;
-        this.energia = 100;
-        this.higiene = 100;
+        this.fome = 100;
+        this.sede = 100;
+        this.sono = 100;
         this.felicidade = 100;
-        this.afeto = 0;
-        this.doente = false;
-        this.humor = "Feliz";
-        this.pontos = 0;
+        this.saude = 100;
         this.vivo = true;
+        this.pontos = 50; // Pontos iniciais
+        this.inventario = new Inventario();
+        this.doente = false;
+        this.tipoDoenca = "";
+        atualizarHumor();
     }
 
-    //
-    public abstract void agir();
+    // Métodos abstratos que cada criatura deve implementar
+    public abstract void emitirSom();
+    public abstract String getTipo();
+    public abstract void habilidadeEspecial();
 
-    // "botão para alimentar"
+    // Ações básicas
     public void alimentar() {
-        fome = Math.max(0, fome - 20);
-        energia = Math.min(100, energia + 5);
-        atualizarHumor();
-    }
-
-    // "botão para brincar"
-    public void brincar() {
-        felicidade = Math.min(100, felicidade + 15);
-        energia = Math.max(0, energia - 10);
-        higiene = Math.max(0, higiene - 5);
-        afeto += 1;
-        atualizarHumor();
-    }
-
-    // "botão para por para dormir"
-    public void dormir() {
-        energia = Math.min(100, energia + 50);
-        fome = Math.min(100, fome + 20);
-        atualizarHumor();
-    }
-
-    // "botão para dar banho"
-    public void banho() {
-        higiene = 100;
-        felicidade = Math.min(100, felicidade + 10);
-        energia = Math.max(0, energia - 5);
-        atualizarHumor();
-    }
-
-    // "botão para levar ao veterinário"
-    public void veterinario() {
-        if (doente) {
-            doente = false;
-            saude = Math.min(100, saude + 30);
-        }
-        atualizarHumor();
-    }
-
-    // Método para atualizar o humor baseado nos stats
-    public void atualizarHumor() {
         if (!vivo) {
-            humor = "Morto";
+            System.out.println(nome + " não pode ser alimentado pois não está vivo.");
             return;
         }
         
-        if (saude <= 0 || (energia <= 0 && higiene <= 0 && felicidade <= 0)) {
-            vivo = false;
-            humor = "Morto";
+        if (fome >= 90) {
+            System.out.println(nome + " não está com fome no momento!");
             return;
         }
         
-        if (doente) {
-            humor = "Doente";
-        } else if (fome >= 80) {
-            humor = "Faminto";
-        } else if (energia <= 20) {
-            humor = "Exausto";
-        } else if (higiene <= 30) {
-            humor = "Sujo";
-        } else if (felicidade <= 30) {
-            humor = "Triste";
-        } else if (felicidade >= 80 && energia >= 70) {
-            humor = "Muito Feliz";
+        fome = Math.min(100, fome + 30);
+        felicidade = Math.min(100, felicidade + 5);
+        System.out.println(nome + " foi alimentado! Fome: " + fome);
+        atualizarHumor();
+    }
+
+    public void alimentar(Scanner scanner) {
+        if (!vivo) {
+            System.out.println(nome + " não pode ser alimentado pois não está vivo.");
+            return;
+        }
+        
+        if (fome >= 90) {
+            System.out.println(nome + " não está com fome no momento!");
+            return;
+        }
+
+        System.out.println("\n=== ALIMENTAR " + nome.toUpperCase() + " ===");
+        inventario.mostrarComidas();
+        
+        if (inventario.temComidas()) {
+            System.out.print("Escolha uma comida (número): ");
+            try {
+                int escolha = scanner.nextInt();
+                scanner.nextLine(); // limpar buffer
+                
+                ItemComida comida = inventario.usarComida(escolha);
+                if (comida != null) {
+                    aplicarEfeitosComida(comida);
+                    System.out.println(nome + " comeu " + comida.getNome() + "!");
+                    System.out.println("Efeitos: " + comida.getDescricao());
+                    atualizarHumor();
+                } else {
+                    System.out.println("Opção inválida!");
+                }
+            } catch (Exception e) {
+                System.out.println("Entrada inválida!");
+                scanner.nextLine(); // limpar buffer
+            }
         } else {
-            humor = "Feliz";
+            System.out.println("Você não tem comidas no inventário!");
+            System.out.println("Visite a loja de comidas para comprar alimentos.");
         }
     }
 
-    // Método para passar o tempo (envelhece e altera stats)
-    public void passarTempo() {
+    private void aplicarEfeitosComida(ItemComida comida) {
+        fome = Math.min(100, fome + comida.getEfeitoFome());
+        sede = Math.min(100, sede + comida.getEfeitoSede());
+        felicidade = Math.min(100, felicidade + comida.getEfeitoFelicidade());
+        saude = Math.min(100, saude + comida.getEfeitoSaude());
+        
+        // Curar doenças com comidas especiais
+        if (comida.getEfeitoSaude() >= 30 && doente) {
+            curarDoenca();
+        }
+    }
+
+    public void darAgua() {
+        if (!vivo) {
+            System.out.println(nome + " não pode beber água pois não está vivo.");
+            return;
+        }
+        
+        if (sede >= 90) {
+            System.out.println(nome + " não está com sede no momento!");
+            return;
+        }
+        
+        sede = Math.min(100, sede + 40);
+        felicidade = Math.min(100, felicidade + 3);
+        System.out.println(nome + " bebeu água! Sede: " + sede);
+        atualizarHumor();
+    }
+
+    public void dormir() {
+        if (!vivo) {
+            System.out.println(nome + " não pode dormir pois não está vivo.");
+            return;
+        }
+        
+        if (sono >= 90) {
+            System.out.println(nome + " não está com sono no momento!");
+            return;
+        }
+        
+        sono = Math.min(100, sono + 50);
+        saude = Math.min(100, saude + 5);
+        System.out.println(nome + " dormiu um pouco! Sono: " + sono);
+        atualizarHumor();
+    }
+
+    public void brincar() {
+        if (!vivo) {
+            System.out.println(nome + " não pode brincar pois não está vivo.");
+            return;
+        }
+        
+        felicidade = Math.min(100, felicidade + 20);
+        fome = Math.max(0, fome - 5);
+        sede = Math.max(0, sede - 5);
+        sono = Math.max(0, sono - 10);
+        System.out.println(nome + " brincou e ficou mais feliz! Felicidade: " + felicidade);
+        atualizarHumor();
+    }
+
+    public void curar() {
+        if (!vivo) {
+            System.out.println(nome + " não pode ser curado pois não está vivo.");
+            return;
+        }
+        
+        if (saude >= 90 && !doente) {
+            System.out.println(nome + " já está saudável!");
+            return;
+        }
+        
+        saude = Math.min(100, saude + 30);
+        curarDoenca();
+        System.out.println(nome + " foi curado! Saúde: " + saude);
+        atualizarHumor();
+    }
+
+    // Atualização automática pelo tempo
+    public void atualizacaoTempo() {
         if (!vivo) return;
         
-        idade++;
-        fome = Math.min(100, fome + 5);
-        energia = Math.max(0, energia - 3);
-        higiene = Math.max(0, higiene - 2);
+        // Degradação natural dos status
+        fome = Math.max(0, fome - 3);
+        sede = Math.max(0, sede - 4);
+        sono = Math.max(0, sono - 2);
         felicidade = Math.max(0, felicidade - 1);
         
-        // Chance de ficar doente se stats estão baixos
-        if ((fome > 70 || higiene < 30 || energia < 20) && Math.random() < 0.1) {
-            doente = true;
-            saude = Math.max(0, saude - 10);
+        // Se doente, saúde diminui mais rápido
+        if (doente) {
+            saude = Math.max(0, saude - 5);
+        } else {
+            // Chance de ficar doente se status baixos
+            if (fome < 20 || sede < 20 || sono < 20) {
+                Random random = new Random();
+                if (random.nextInt(100) < 15) { // 15% de chance
+                    ficarDoente();
+                }
+            }
         }
         
-        // Morre de velhice
-        if (idade > 100) {
-            vivo = false;
-        }
-        
+        // Verificar se ainda está vivo
+        verificarVida();
         atualizarHumor();
     }
 
-    // Métodos para o sistema de pontos
-    public void adicionarPontos(int pontos) {
-        this.pontos += pontos;
+    private void ficarDoente() {
+        if (!doente) {
+            doente = true;
+            Random random = new Random();
+            String[] doencas = {"Resfriado", "Dor de barriga", "Febre", "Tristeza profunda"};
+            tipoDoenca = doencas[random.nextInt(doencas.length)];
+            saude = Math.max(0, saude - 20);
+            System.out.println("\n⚠️  " + nome + " ficou doente com: " + tipoDoenca);
+        }
     }
 
-    public boolean gastarPontos(int pontos) {
-        if (this.pontos >= pontos) {
-            this.pontos -= pontos;
+    private void curarDoenca() {
+        if (doente) {
+            doente = false;
+            tipoDoenca = "";
+            System.out.println("✅ " + nome + " foi curado da doença!");
+        }
+    }
+
+    public void verificarVida() {
+        if (fome <= 0 && sede <= 0 && sono <= 0) {
+            vivo = false;
+            humor = "💀 Morto";
+            System.out.println("\n💀 " + nome + " morreu por falta de cuidados...");
+        } else if (saude <= 0) {
+            vivo = false;
+            humor = "💀 Morto";
+            System.out.println("\n💀 " + nome + " morreu por problemas de saúde...");
+        }
+    }
+
+    public void atualizarHumor() {
+        if (!vivo) {
+            humor = "💀 Morto";
+            return;
+        }
+        
+        if (doente) {
+            humor = "🤒 Doente (" + tipoDoenca + ")";
+            return;
+        }
+        
+        int media = (fome + sede + sono + felicidade + saude) / 5;
+        
+        if (media >= 90) {
+            humor = "😄 Muito Feliz";
+        } else if (media >= 70) {
+            humor = "😊 Feliz";
+        } else if (media >= 50) {
+            humor = "😐 Neutro";
+        } else if (media >= 30) {
+            humor = "😔 Triste";
+        } else {
+            humor = "😭 Muito Triste";
+        }
+    }
+
+    // Sistema de pontos
+    public void ganharPontos(int quantidade) {
+        pontos += quantidade;
+        System.out.println("+" + quantidade + " pontos! Total: " + pontos);
+    }
+
+    public boolean gastarPontos(int quantidade) {
+        if (pontos >= quantidade) {
+            pontos -= quantidade;
             return true;
         }
         return false;
     }
 
-    // Métodos para a loja poder modificar atributos
-    public void adicionarEnergia(int valor) {
-        energia = Math.min(100, energia + valor);
-        atualizarHumor();
+    // Método para mostrar status
+    public void mostrarStatus() {
+        System.out.println("\n=== STATUS DE " + nome.toUpperCase() + " ===");
+        System.out.println("Tipo: " + getTipo());
+        System.out.println("Humor: " + humor);
+        System.out.println("Vivo: " + (vivo ? "Sim" : "Não"));
+        if (doente) {
+            System.out.println("Estado: 🤒 Doente (" + tipoDoenca + ")");
+        }
+        System.out.println("\n--- Necessidades ---");
+        System.out.println("Fome: " + fome + "/100 " + getBarraStatus(fome));
+        System.out.println("Sede: " + sede + "/100 " + getBarraStatus(sede));
+        System.out.println("Sono: " + sono + "/100 " + getBarraStatus(sono));
+        System.out.println("Felicidade: " + felicidade + "/100 " + getBarraStatus(felicidade));
+        System.out.println("Saúde: " + saude + "/100 " + getBarraStatus(saude));
+        System.out.println("\nPontos: " + pontos);
+        System.out.println("Comidas no inventário: " + inventario.getQuantidadeTotal());
     }
-    
-    public void reduzirFome(int valor) {
-        fome = Math.max(0, fome - valor);
-        atualizarHumor();
-    }
-    
-    public void adicionarSaude(int valor) {
-        saude = Math.min(100, saude + valor);
-        atualizarHumor();
-    }
-    
-    public void curarDoenca() {
-        doente = false;
-        atualizarHumor();
-    }
-    
-    public void adicionarFelicidade(int valor) {
-        felicidade = Math.min(100, felicidade + valor);
-        atualizarHumor();
-    }
-    
-    public void adicionarAfeto(int valor) {
-        afeto = Math.min(100, afeto + valor);
-        atualizarHumor();
-    }
-    
-    public void limparTotalmente() {
-        higiene = 100;
-        atualizarHumor();
+
+    private String getBarraStatus(int valor) {
+        StringBuilder barra = new StringBuilder("[");
+        int barras = valor / 10;
+        for (int i = 0; i < 10; i++) {
+            if (i < barras) {
+                barra.append("█");
+            } else {
+                barra.append("░");
+            }
+        }
+        barra.append("]");
+        return barra.toString();
     }
 
     // Getters
     public String getNome() { return nome; }
-    public int getIdade() { return idade; }
     public int getFome() { return fome; }
-    public int getSaude() { return saude; }
-    public int getEnergia() { return energia; }
-    public int getHigiene() { return higiene; }
+    public int getSede() { return sede; }
+    public int getSono() { return sono; }
     public int getFelicidade() { return felicidade; }
-    public int getAfeto() { return afeto; }
-    public boolean isDoente() { return doente; }
+    public int getSaude() { return saude; }
+    public boolean isVivo() { return vivo; }
     public String getHumor() { return humor; }
     public int getPontos() { return pontos; }
-    public boolean isVivo() { return vivo; }
+    public Inventario getInventario() { return inventario; }
+    public boolean isDoente() { return doente; }
+    public String getTipoDoenca() { return tipoDoenca; }
 
-    // Setters (se necessário)
+    // Setters
     public void setNome(String nome) { this.nome = nome; }
-
-    // Método para exibir status
-    public String getStatus() {
-        return String.format(
-            "=== %s ===\n" +
-            "Idade: %d anos\n" +
-            "Humor: %s\n" +
-            "Fome: %d/100\n" +
-            "Saúde: %d/100\n" +
-            "Energia: %d/100\n" +
-            "Higiene: %d/100\n" +
-            "Felicidade: %d/100\n" +
-            "Afeto: %d\n" +
-            "Pontos: %d\n" +
-            "Status: %s\n",
-            nome, idade, humor, fome, saude, energia, higiene, felicidade, afeto, pontos,
-            vivo ? (doente ? "Doente" : "Saudável") : "Morto"
-        );
+    public void setFome(int fome) { 
+        this.fome = Math.max(0, Math.min(100, fome)); 
+        atualizarHumor();
     }
+    public void setSede(int sede) { 
+        this.sede = Math.max(0, Math.min(100, sede)); 
+        atualizarHumor();
+    }
+    public void setSono(int sono) { 
+        this.sono = Math.max(0, Math.min(100, sono)); 
+        atualizarHumor();
+    }
+    public void setFelicidade(int felicidade) { 
+        this.felicidade = Math.max(0, Math.min(100, felicidade)); 
+        atualizarHumor();
+    }
+    public void setSaude(int saude) { 
+        this.saude = Math.max(0, Math.min(100, saude)); 
+        atualizarHumor();
+    }
+    public void setPontos(int pontos) { this.pontos = Math.max(0, pontos); }
 }

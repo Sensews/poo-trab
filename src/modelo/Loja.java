@@ -56,8 +56,8 @@ public class Loja {
         }
     }    private static void comprarComidaPremium(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(20)) {
-            criatura.reduzirFome(40);
-            criatura.adicionarEnergia(10);
+            criatura.setFome(Math.min(100, criatura.getFome() + 40));
+            criatura.setSono(Math.min(100, criatura.getSono() + 10));
             System.out.println(criatura.getNome() + " comeu comida premium! Que delícia!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 20 pontos.");
@@ -66,8 +66,7 @@ public class Loja {
     
     private static void comprarRemedio(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(30)) {
-            criatura.curarDoenca();
-            criatura.adicionarSaude(20);
+            criatura.curar();
             System.out.println(criatura.getNome() + " tomou remédio e está se sentindo melhor!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 30 pontos.");
@@ -76,8 +75,7 @@ public class Loja {
     
     private static void comprarBrinquedoEspecial(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(25)) {
-            criatura.adicionarFelicidade(30);
-            criatura.adicionarAfeto(5);
+            criatura.setFelicidade(Math.min(100, criatura.getFelicidade() + 30));
             System.out.println(criatura.getNome() + " adorou o brinquedo especial!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 25 pontos.");
@@ -86,7 +84,7 @@ public class Loja {
     
     private static void comprarVitamina(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(15)) {
-            criatura.adicionarEnergia(25);
+            criatura.setSono(Math.min(100, criatura.getSono() + 25));
             System.out.println(criatura.getNome() + " tomou vitamina e está cheio de energia!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 15 pontos.");
@@ -95,8 +93,8 @@ public class Loja {
     
     private static void comprarShampooPremium(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(10)) {
-            criatura.limparTotalmente();
-            criatura.adicionarFelicidade(15);
+            criatura.setSaude(Math.min(100, criatura.getSaude() + 10));
+            criatura.setFelicidade(Math.min(100, criatura.getFelicidade() + 15));
             System.out.println(criatura.getNome() + " tomou um banho premium e está radiante!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 10 pontos.");
@@ -105,8 +103,8 @@ public class Loja {
     
     private static void comprarPocaoAmor(CriaturaVirtual criatura) {
         if (criatura.gastarPontos(50)) {
-            criatura.adicionarAfeto(20);
-            criatura.adicionarFelicidade(10);
+            criatura.setFelicidade(Math.min(100, criatura.getFelicidade() + 30));
+            criatura.setSaude(Math.min(100, criatura.getSaude() + 10));
             System.out.println(criatura.getNome() + " bebeu a poção do amor e está te amando ainda mais!");
         } else {
             System.out.println("Pontos insuficientes! Você precisa de 50 pontos.");

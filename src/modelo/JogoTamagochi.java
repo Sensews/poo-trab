@@ -6,18 +6,27 @@ public class JogoTamagochi {
     private CriaturaVirtual criatura;
     private Scanner scanner;
     private boolean jogoAtivo;
+    private GerenciadorTempo gerenciadorTempo;
+    private LojaComidas lojaComidas;
     
     public JogoTamagochi() {
         scanner = new Scanner(System.in);
         jogoAtivo = true;
+        lojaComidas = new LojaComidas();
     }
-    
-    public void iniciarJogo() {
+      public void iniciarJogo() {
         exibirBoasVindas();
         criarCriatura();
         
         if (criatura != null) {
+            // Iniciar gerenciador de tempo
+            gerenciadorTempo = new GerenciadorTempo(criatura);
+            gerenciadorTempo.iniciar();
+            
             loopPrincipal();
+            
+            // Parar gerenciador de tempo
+            gerenciadorTempo.parar();
         }
         
         System.out.println("Obrigado por jogar!");
@@ -77,11 +86,10 @@ public class JogoTamagochi {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Por favor, digite um número válido!");
-            }
-        }
+            }        }
         
         System.out.println("Seu tamagochi está pronto para começar a aventura!");
-        System.out.println(criatura.getStatus());
+        criatura.mostrarStatus();
     }
     
     private void loopPrincipal() {
@@ -89,16 +97,6 @@ public class JogoTamagochi {
             exibirMenu();
             int opcao = lerOpcao();
             processarOpcao(opcao);
-            
-            // A criatura age automaticamente
-            if (Math.random() < 0.3) { // 30% chance
-                criatura.agir();
-            }
-            
-            // Passar tempo automaticamente (simula o tempo passando)
-            if (Math.random() < 0.1) { // 10% chance de passar tempo
-                criatura.passarTempo();
-            }
         }
         
         if (!criatura.isVivo()) {
@@ -109,18 +107,19 @@ public class JogoTamagochi {
     
     private void exibirMenu() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println(criatura.getStatus());
+        criatura.mostrarStatus();
         System.out.println("=".repeat(50));
         System.out.println("O que você quer fazer?");
-        System.out.println("1. Alimentar");
-        System.out.println("2. Brincar");
+        System.out.println("1. Alimentar (usar inventário)");
+        System.out.println("2. Dar água");
         System.out.println("3. Colocar para dormir");
-        System.out.println("4. Dar banho");
-        System.out.println("5. Levar ao veterinário");
+        System.out.println("4. Brincar");
+        System.out.println("5. Curar/Levar ao veterinário");
         System.out.println("6. Ver status detalhado");
         System.out.println("7. Jogar minigame (ganhar pontos)");
-        System.out.println("8. Ir à loja");
-        System.out.println("9. Ver regras do minigame");
+        System.out.println("8. Loja de melhorias");
+        System.out.println("9. Loja de comidas");
+        System.out.println("10. Habilidade especial");
         System.out.println("0. Sair do jogo");
     }
     
@@ -132,39 +131,37 @@ public class JogoTamagochi {
             return -1; // Opção inválida
         }
     }
-    
-    private void processarOpcao(int opcao) {
+      private void processarOpcao(int opcao) {
         switch (opcao) {
             case 1:
-                criatura.alimentar();
-                System.out.println(criatura.getNome() + " foi alimentado!");
+                criatura.alimentar(scanner);
                 break;
             case 2:
-                criatura.brincar();
+                criatura.darAgua();
                 break;
             case 3:
                 criatura.dormir();
-                System.out.println(criatura.getNome() + " dormiu e recuperou energia!");
                 break;
             case 4:
-                criatura.banho();
-                System.out.println(criatura.getNome() + " tomou banho!");
+                criatura.brincar();
                 break;
             case 5:
-                criatura.veterinario();
-                System.out.println(criatura.getNome() + " foi ao veterinário!");
+                criatura.curar();
                 break;
             case 6:
-                System.out.println(criatura.getStatus());
+                criatura.mostrarStatus();
                 break;
             case 7:
                 MinigameDigitacao.jogarMinigame(criatura, scanner);
-                break;
-            case 8:
+                break;            case 8:
                 Loja.abrirLoja(criatura, scanner);
                 break;
             case 9:
-                MinigameDigitacao.exibirRegras();
+                lojaComidas.abrirLoja(criatura, scanner);
+                break;
+            case 10:
+                criatura.habilidadeEspecial();
+                criatura.emitirSom();
                 break;
             case 0:
                 System.out.println("Salvando jogo...");
