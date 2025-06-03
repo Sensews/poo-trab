@@ -18,12 +18,13 @@ public class GerenciadorTempo {
         
         ativo = true;
         timer = new Timer(true); // Timer daemon
-        
-        // Atualização a cada 10 segundos
+          // Atualização a cada 10 segundos
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (criatura != null && criatura.isVivo()) {
+                    // Aplicar efeitos dos upgrades antes da atualização
+                    aplicarUpgrades();
                     criatura.atualizacaoTempo();
                 }
             }
@@ -43,5 +44,26 @@ public class GerenciadorTempo {
     
     public boolean isAtivo() {
         return ativo;
+    }
+    
+    private void aplicarUpgrades() {
+        // Aplicar upgrade de Felicidade Eterna
+        if (Loja.temFelicidadeEterna(criatura) && criatura.getFelicidade() < 30) {
+            criatura.setFelicidade(30);
+        }
+        
+        // Aplicar upgrade de Super Regeneração
+        if (Loja.temSuperRegeneracao(criatura)) {
+            criatura.setSaude(Math.min(100, criatura.getSaude() + 2));
+        }
+        
+        // Aplicar upgrade de Masterpet (status sempre no máximo)
+        if (Loja.temMasterpet(criatura)) {
+            criatura.setFome(100);
+            criatura.setSede(100);
+            criatura.setSono(100);
+            criatura.setFelicidade(100);
+            criatura.setSaude(100);
+        }
     }
 }

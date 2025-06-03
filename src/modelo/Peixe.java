@@ -37,17 +37,8 @@ public class Peixe extends CriaturaVirtual {
     public void brincar() {
         super.brincar();
         System.out.println(nome + " nadou em círculos brincando graciosamente!");
-        
-        // Peixes gastam pouca energia brincando
+          // Peixes gastam pouca energia brincando
         setSono(Math.max(0, getSono() - 3));
         setFelicidade(Math.min(100, getFelicidade() + 8));
-    }
-
-    @Override
-    public void darAgua() {
-        // Peixes não precisam beber água, já estão nela
-        System.out.println(nome + " já está sempre hidratado na água!");
-        setFelicidade(Math.min(100, getFelicidade() + 3));
-        setSede(100);
     }
 }

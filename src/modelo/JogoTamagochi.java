@@ -108,18 +108,16 @@ public class JogoTamagochi {
     private void exibirMenu() {
         System.out.println("\n" + "=".repeat(50));
         criatura.mostrarStatus();
-        System.out.println("=".repeat(50));
-        System.out.println("O que você quer fazer?");
+        System.out.println("=".repeat(50));        System.out.println("O que você quer fazer?");
         System.out.println("1. Alimentar (usar inventário)");
-        System.out.println("2. Dar água");
-        System.out.println("3. Colocar para dormir");
-        System.out.println("4. Brincar");
-        System.out.println("5. Curar/Levar ao veterinário");
-        System.out.println("6. Ver status detalhado");
-        System.out.println("7. Jogar minigame (ganhar pontos)");
-        System.out.println("8. Loja de melhorias");
-        System.out.println("9. Loja de comidas");
-        System.out.println("10. Habilidade especial");
+        System.out.println("2. Colocar para dormir");
+        System.out.println("3. Brincar");
+        System.out.println("4. Curar/Levar ao veterinário");
+        System.out.println("5. Ver status detalhado");
+        System.out.println("6. Jogar minigame (ganhar pontos)");
+        System.out.println("7. Loja de melhorias permanentes");
+        System.out.println("8. Loja de comidas");
+        System.out.println("9. Habilidade especial");
         System.out.println("0. Sair do jogo");
     }
     
@@ -130,36 +128,33 @@ public class JogoTamagochi {
         } catch (NumberFormatException e) {
             return -1; // Opção inválida
         }
-    }
-      private void processarOpcao(int opcao) {
+    }      private void processarOpcao(int opcao) {
         switch (opcao) {
             case 1:
                 criatura.alimentar(scanner);
                 break;
             case 2:
-                criatura.darAgua();
-                break;
-            case 3:
                 criatura.dormir();
                 break;
-            case 4:
+            case 3:
                 criatura.brincar();
                 break;
-            case 5:
+            case 4:
                 criatura.curar();
                 break;
-            case 6:
+            case 5:
                 criatura.mostrarStatus();
                 break;
-            case 7:
+            case 6:
                 MinigameDigitacao.jogarMinigame(criatura, scanner);
-                break;            case 8:
+                break;
+            case 7:
                 Loja.abrirLoja(criatura, scanner);
                 break;
-            case 9:
+            case 8:
                 lojaComidas.abrirLoja(criatura, scanner);
                 break;
-            case 10:
+            case 9:
                 criatura.habilidadeEspecial();
                 criatura.emitirSom();
                 break;

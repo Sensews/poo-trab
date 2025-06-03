@@ -92,36 +92,22 @@ public abstract class CriaturaVirtual {
             System.out.println("Você não tem comidas no inventário!");
             System.out.println("Visite a loja de comidas para comprar alimentos.");
         }
-    }
-
-    private void aplicarEfeitosComida(ItemComida comida) {
-        fome = Math.min(100, fome + comida.getEfeitoFome());
-        sede = Math.min(100, sede + comida.getEfeitoSede());
-        felicidade = Math.min(100, felicidade + comida.getEfeitoFelicidade());
-        saude = Math.min(100, saude + comida.getEfeitoSaude());
+    }    private void aplicarEfeitosComida(ItemComida comida) {
+        int multiplicador = Loja.temEficienciaComida(this) ? 150 : 100; // 50% mais efeito se tiver upgrade
+        
+        fome = Math.min(100, fome + (comida.getEfeitoFome() * multiplicador / 100));
+        sede = Math.min(100, sede + (comida.getEfeitoSede() * multiplicador / 100));
+        felicidade = Math.min(100, felicidade + (comida.getEfeitoFelicidade() * multiplicador / 100));
+        saude = Math.min(100, saude + (comida.getEfeitoSaude() * multiplicador / 100));
+        
+        if (Loja.temEficienciaComida(this)) {
+            System.out.println("✨ BÔNUS DE EFICIÊNCIA ALIMENTAR APLICADO!");
+        }
         
         // Curar doenças com comidas especiais
         if (comida.getEfeitoSaude() >= 30 && doente) {
             curarDoenca();
-        }
-    }
-
-    public void darAgua() {
-        if (!vivo) {
-            System.out.println(nome + " não pode beber água pois não está vivo.");
-            return;
-        }
-        
-        if (sede >= 90) {
-            System.out.println(nome + " não está com sede no momento!");
-            return;
-        }
-        
-        sede = Math.min(100, sede + 40);
-        felicidade = Math.min(100, felicidade + 3);
-        System.out.println(nome + " bebeu água! Sede: " + sede);
-        atualizarHumor();
-    }
+        }    }
 
     public void dormir() {
         if (!vivo) {
@@ -169,26 +155,39 @@ public abstract class CriaturaVirtual {
         curarDoenca();
         System.out.println(nome + " foi curado! Saúde: " + saude);
         atualizarHumor();
-    }
-
-    // Atualização automática pelo tempo
+    }    // Atualização automática pelo tempo
     public void atualizacaoTempo() {
         if (!vivo) return;
         
-        // Degradação natural dos status
+        // Não fazer degradação se tiver Masterpet (já será regenerado automaticamente)
+        if (Loja.temMasterpet(this)) {
+            return;
+        }
+        
+        // Degradação natural dos status (considerando upgrades)
         fome = Math.max(0, fome - 3);
         sede = Math.max(0, sede - 4);
-        sono = Math.max(0, sono - 2);
-        felicidade = Math.max(0, felicidade - 1);
+        
+        // Upgrade de Energia Máxima reduz degradação do sono em 50%
+        int degradacaoSono = Loja.temEnergiaMaxima(this) ? 1 : 2;
+        sono = Math.max(0, sono - degradacaoSono);
+        
+        // Upgrade de Felicidade Eterna mantém felicidade mínima em 30
+        if (Loja.temFelicidadeEterna(this)) {
+            felicidade = Math.max(30, felicidade - 1);
+        } else {
+            felicidade = Math.max(0, felicidade - 1);
+        }
         
         // Se doente, saúde diminui mais rápido
         if (doente) {
             saude = Math.max(0, saude - 5);
         } else {
-            // Chance de ficar doente se status baixos
+            // Chance de ficar doente com upgrade de resistência
             if (fome < 20 || sede < 20 || sono < 20) {
                 Random random = new Random();
-                if (random.nextInt(100) < 15) { // 15% de chance
+                int chanceDoenca = Loja.temResistenciaDoenca(this) ? 3 : 15; // 3% vs 15%
+                if (random.nextInt(100) < chanceDoenca) {
                     ficarDoente();
                 }
             }
@@ -254,10 +253,14 @@ public abstract class CriaturaVirtual {
         } else {
             humor = "😭 Muito Triste";
         }
-    }
-
-    // Sistema de pontos
+    }    // Sistema de pontos
     public void ganharPontos(int quantidade) {
+        // Aplicar multiplicador da loja se existir
+        if (Loja.temMultiplicadorPontos(this)) {
+            quantidade *= 2;
+            System.out.println("🎯 MULTIPLICADOR DA LOJA ATIVADO!");
+        }
+        
         pontos += quantidade;
         System.out.println("+" + quantidade + " pontos! Total: " + pontos);
     }
