@@ -3,7 +3,7 @@ package interfacegrafica;
 import javax.swing.*;
 import java.awt.*;
 
-public class InterfaceGrafica {
+public class Pagina_Nome {
     public static void main(String[] args){
         JFrame janela = new JFrame("Primeira Janela");
         janela.setSize(500, 400);
