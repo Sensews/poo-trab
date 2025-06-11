@@ -1,6 +1,9 @@
 package interfacegrafica;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class Janela_Bem_Vindo {
     public static void main(String []args){
         JFrame janela = new JFrame("Tamagotchi - Bem-vindo");
@@ -23,7 +26,7 @@ public class Janela_Bem_Vindo {
 
         //uma logo pro trabalho, ainda não decidida
         try {
-            ImageIcon logo = new ImageIcon(Janela_Bem_Vindo.class.getResource("logo.png")); // coloque a imagem 'logo.png' na mesma pasta do projeto
+            ImageIcon logo = new ImageIcon(Janela_Bem_Vindo.class.getResource("imagens/logo.png")); // coloque a imagem 'logo.png' na mesma pasta do projeto
             Image imagemRedimensionada = logo.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
             JLabel labelImagem = new JLabel(new ImageIcon(imagemRedimensionada));
             labelImagem.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -49,6 +52,13 @@ public class Janela_Bem_Vindo {
         botao.setFont(new Font("Segoe UI", Font.BOLD, 18));
         botao.setPreferredSize(new Dimension(100, 35));
         botao.setMaximumSize(new Dimension(150, 50));
+        botao.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Pagina_Nome.main(null); // abre a próxima página
+                janela.dispose(); // fecha a janela atual
+            }
+        });
 
         painel.add(botao);
         janela.add(painel);
