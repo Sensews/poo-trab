@@ -11,12 +11,11 @@ import java.util.List;
 public class PaginaInventario extends JFrame {
     private Inventario inventario;
     private CriaturaVirtual animal;
-
     private JPanel painelItens;
 
     public PaginaInventario(CriaturaVirtual animal) {
         this.animal = animal;
-        this.inventario = animal.getInventario(); // pega o inventário do próprio animal
+        this.inventario = animal.getInventario();
 
         setTitle("Inventário de Comidas");
         setSize(500, 600);
@@ -42,7 +41,7 @@ public class PaginaInventario extends JFrame {
 
         JScrollPane scroll = new JScrollPane(painelItens);
         scroll.setBorder(null);
-        scroll.getVerticalScrollBar().setUnitIncrement(16); // rolagem suave
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
         painelPrincipal.add(scroll, BorderLayout.CENTER);
 
         atualizarInventario();
@@ -65,7 +64,7 @@ public class PaginaInventario extends JFrame {
         } else {
             for (ItemComida comida : comidas) {
                 painelItens.add(criarPainelComida(comida));
-                painelItens.add(Box.createRigidArea(new Dimension(0, 10)));
+                painelItens.add(Box.createRigidArea(new Dimension(0, 8)));
             }
         }
 
@@ -77,44 +76,61 @@ public class PaginaInventario extends JFrame {
         Color corFundoItem = new Color(230, 220, 210);
         Color corBotao = new Color(100, 160, 120);
 
-        JPanel painel = new JPanel(new BorderLayout());
+        JPanel painel = new JPanel(new GridBagLayout());
         painel.setBackground(corFundoItem);
         painel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.BLACK),
+                BorderFactory.createLineBorder(new Color(180, 170, 160)),
                 BorderFactory.createEmptyBorder(8, 8, 8, 8)
         ));
 
-        JLabel nome = new JLabel(comida.getNome() + " - " + comida.getDescricao());
-        nome.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        painel.add(nome, BorderLayout.NORTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 4, 4, 4);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Nome e descrição
+        JLabel nome = new JLabel("<html><b>" + comida.getNome() + "</b>: " + comida.getDescricao() + "</html>");
+        nome.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        painel.add(nome, gbc);
+
+        // Efeitos
         JLabel efeitos = new JLabel(String.format(
-                "<html><body style='width: 300px;'>Efeitos: Fome +%d | Sede +%d | Felicidade +%d | Saúde +%d</body></html>",
+                "<html><small>Fome +%d | Sede +%d | Felicidade +%d | Saúde +%d</small></html>",
                 comida.getEfeitoFome(), comida.getEfeitoSede(),
                 comida.getEfeitoFelicidade(), comida.getEfeitoSaude()
         ));
         efeitos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        painel.add(efeitos, BorderLayout.CENTER);
+        gbc.gridy = 1;
+        painel.add(efeitos, gbc);
 
+        // Botão
         JButton botaoUsar = new JButton("Usar");
         botaoUsar.setBackground(corBotao);
         botaoUsar.setForeground(Color.WHITE);
         botaoUsar.setFocusPainted(false);
-        botaoUsar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        botaoUsar.setPreferredSize(new Dimension(80, 35));
+        botaoUsar.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        botaoUsar.setPreferredSize(new Dimension(80, 30));
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 2;
+        gbc.weightx = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        painel.add(botaoUsar, gbc);
 
         botaoUsar.addActionListener(e -> {
             usarComida(comida);
-            atualizarInventario(); // atualiza a interface após remover o item
+            atualizarInventario();
         });
 
-        painel.add(botaoUsar, BorderLayout.EAST);
         return painel;
     }
 
     private void usarComida(ItemComida comida) {
-        inventario.removerComida(comida); // Remove a comida do inventário
-        animal.alimentar(comida); // Aplica os efeitos no animal
+        inventario.removerComida(comida);
+        animal.alimentar(comida);
         JOptionPane.showMessageDialog(this,
                 "Você usou: " + comida.getNome() + "\nO Tamagotchi foi alimentado!",
                 "Item Usado",

@@ -125,7 +125,7 @@ public class PaginaAnimal extends JFrame {
 
         painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
 
-        Timer timer = new Timer(1200, (ActionEvent e) -> {
+        Timer timer = new Timer(1500, (ActionEvent e) -> {
             animal.atualizacaoTempo();
             atualizarBarras();
         });
