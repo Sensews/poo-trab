@@ -54,6 +54,22 @@ public abstract class CriaturaVirtual {
         System.out.println(nome + " foi alimentado! Fome: " + fome);
         atualizarHumor();
     }
+    public void alimentar(ItemComida comida) {
+        if (!vivo) {
+            System.out.println(nome + " não pode ser alimentado pois não está vivo.");
+            return;
+        }
+
+        if (fome >= 90) {
+            System.out.println(nome + " não está com fome no momento!");
+            return;
+        }
+
+        aplicarEfeitosComida(comida);
+        System.out.println(nome + " comeu " + comida.getNome() + "!");
+        System.out.println("Efeitos: " + comida.getDescricao());
+        atualizarHumor();
+    }
 
     public void alimentar(Scanner scanner) {
         if (!vivo) {

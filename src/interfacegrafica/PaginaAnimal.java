@@ -36,7 +36,7 @@ public class PaginaAnimal extends JFrame {
 
         // --- Título ---
         JLabel titulo = new JLabel("Seu Tamagotchi: " + animal.getNome());
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titulo.setForeground(corTexto);
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
         painelPrincipal.add(titulo, BorderLayout.NORTH);
@@ -65,8 +65,10 @@ public class PaginaAnimal extends JFrame {
             texto = "imagens/cachorro.png";
         } else if (DadosDoJogo.tipoTamagotchi.equals("Gato")) {
             texto = "imagens/gato.png";
-        } else {
+        } else if (DadosDoJogo.tipoTamagotchi.equals("Peixe")) {
             texto = "imagens/peixe.png";
+        }else {
+            texto = "Imagem não encontrada";
         }
 
         JLabel imagemAnimal = carregarImagem(texto, 200, 200);
@@ -82,19 +84,48 @@ public class PaginaAnimal extends JFrame {
         painelPrincipal.add(painelCentro, BorderLayout.CENTER);
 
         // --- Botões ---
-        JPanel painelBotoes = new JPanel(new GridLayout(2, 2, 15, 15));
+        JPanel painelBotoes = new JPanel();
         painelBotoes.setBackground(corFundo);
+        painelBotoes.setLayout(new BoxLayout(painelBotoes, BoxLayout.Y_AXIS));
         painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        painelBotoes.add(criarBotao("ALIMENTAR", corBotao));
-        painelBotoes.add(criarBotao("DESCANSAR", corBotao));
-        painelBotoes.add(criarBotao("BRINCAR", corBotao));
-        painelBotoes.add(criarBotao("LOJA", corBotao));
+        // Botões
+        JButton botaoAlimentar = criarBotao("ALIMENTAR");
+        botaoAlimentar.addActionListener(e -> new PaginaInventario(animal));
+
+        JButton botaoDescansar = criarBotao("DESCANSAR");
+        botaoDescansar.addActionListener(e -> animal.dormir());
+
+        JButton botaoBrincar = criarBotao("BRINCAR");
+        botaoBrincar.addActionListener(e -> animal.brincar());
+
+        JButton botaoLoja = criarBotao("LOJA");
+        botaoLoja.addActionListener(e -> new PaginaLoja(animal));
+
+
+        // Linha 1
+        JPanel linha1 = new JPanel();
+        linha1.setBackground(corFundo);
+        linha1.setLayout(new BoxLayout(linha1, BoxLayout.X_AXIS));
+        linha1.add(botaoAlimentar);
+        linha1.add(Box.createRigidArea(new Dimension(20, 0)));
+        linha1.add(botaoDescansar);
+
+        // Linha 2
+        JPanel linha2 = new JPanel();
+        linha2.setBackground(corFundo);
+        linha2.setLayout(new BoxLayout(linha2, BoxLayout.X_AXIS));
+        linha2.add(botaoBrincar);
+        linha2.add(Box.createRigidArea(new Dimension(20, 0)));
+        linha2.add(botaoLoja);
+
+        painelBotoes.add(linha1);
+        painelBotoes.add(Box.createRigidArea(new Dimension(0, 15)));
+        painelBotoes.add(linha2);
 
         painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
 
-        // Atualização automática
-        Timer timer = new Timer(1000, (ActionEvent e) -> {
+        Timer timer = new Timer(1200, (ActionEvent e) -> {
             animal.atualizacaoTempo();
             atualizarBarras();
         });
@@ -131,14 +162,15 @@ public class PaginaAnimal extends JFrame {
         return barra;
     }
 
-    private JButton criarBotao(String texto, Color corBotao) {
+    private JButton criarBotao(String texto) {
         JButton botao = new JButton(texto);
-        botao.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botao.setBackground(corBotao);
+        botao.setBackground(new Color(180, 140, 90));
         botao.setForeground(Color.WHITE);
         botao.setFocusPainted(false);
-        botao.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 16));
         botao.setPreferredSize(new Dimension(150, 40));
+        botao.setMaximumSize(new Dimension(150, 40));
+        botao.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return botao;
     }
 

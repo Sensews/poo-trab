@@ -20,7 +20,7 @@ public class TipoAnimal {
         painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel titulo = new JLabel("Escolha seu animal");
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titulo.setForeground(new Color(70, 60, 50));
         titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
