@@ -3,7 +3,9 @@ package modelo;
 import java.util.Scanner;
 import java.util.Random;
 
-public abstract class CriaturaVirtual {
+public abstract class CriaturaVirtual implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     protected String nome;
     protected int fome; // 0-100 (0 = com fome, 100 = satisfeito)
     protected int sede; // 0-100 (0 = com sede, 100 = satisfeito)
