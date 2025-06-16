@@ -93,9 +93,6 @@ public class PaginaAnimal extends JFrame {
         JButton botaoAlimentar = criarBotao("ALIMENTAR");
         botaoAlimentar.addActionListener(e -> new PaginaInventario(animal));
 
-        JButton botaoDescansar = criarBotao("DESCANSAR");
-        botaoDescansar.addActionListener(e -> animal.dormir());
-
         JButton botaoBrincar = criarBotao("BRINCAR");
         botaoBrincar.addActionListener(e -> animal.brincar());
 
@@ -104,6 +101,33 @@ public class PaginaAnimal extends JFrame {
 
         JButton botaoMinigame =  criarBotao("MINIGAME");
         botaoMinigame.addActionListener(e -> new PaginaDificuldade(animal));
+
+        JButton botaoDescansar = criarBotao("DESCANSAR");
+        botaoDescansar.addActionListener(e -> {
+            animal.dormir();
+
+            // 2. Desativar todos os botões
+            botaoAlimentar.setEnabled(false);
+            botaoDescansar.setEnabled(false);
+            botaoBrincar.setEnabled(false);
+            botaoLoja.setEnabled(false);
+            botaoMinigame.setEnabled(false);
+
+            // 3. Criar temporizador para 10 segundos (10000 ms)
+            Timer temporizador = new Timer(5000, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // 4. Reativar os botões após 10 segundos
+                    botaoAlimentar.setEnabled(true);
+                    botaoDescansar.setEnabled(true);
+                    botaoBrincar.setEnabled(true);
+                    botaoLoja.setEnabled(true);
+                    botaoMinigame.setEnabled(true);
+                }
+            });
+            temporizador.setRepeats(false); // Só executa uma vez
+            temporizador.start();
+        });
 
 
         // Linha 1
@@ -139,7 +163,7 @@ public class PaginaAnimal extends JFrame {
 
         painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
 
-        Timer timer = new Timer(1500, (ActionEvent e) -> {
+        Timer timer = new Timer(1000, (ActionEvent e) -> {
             animal.atualizacaoTempo();
             atualizarBarras();
         });

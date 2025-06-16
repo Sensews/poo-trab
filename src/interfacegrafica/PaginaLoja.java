@@ -51,10 +51,23 @@ public class PaginaLoja extends JFrame {
         painelItens.setBackground(corFundo);
 
         JScrollPane scrollPane = new JScrollPane(painelItens);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); //Aumentar a velocidade da rolagem
         scrollPane.setBorder(null);
         painelPrincipal.add(scrollPane, BorderLayout.CENTER);
 
         carregarItens();
+
+        // --- Botão SAIR ---
+        JButton botaoSair = new JButton("SAIR");
+        botaoSair.setBackground(new Color(150, 110, 70));
+        botaoSair.setForeground(Color.WHITE);
+        botaoSair.setFocusPainted(false);
+        botaoSair.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        botaoSair.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botaoSair.addActionListener(e -> dispose());
+
+        painelItens.add(Box.createRigidArea(new Dimension(0, 10)));
+        painelItens.add(botaoSair);
 
         add(painelPrincipal);
         setVisible(true);

@@ -15,17 +15,17 @@ public class LojaComidas {
         comidasDisponiveis = new ArrayList<>();
         
         // Comidas básicas
-        comidasDisponiveis.add(new ItemComida("Ração Comum", 15, 20, 0, 2, 0,
+        comidasDisponiveis.add(new ItemComida("Ração Comum", 15, 20, 0, 2, 10,
             "Ração básica que mata a fome"));
-        comidasDisponiveis.add(new ItemComida("Água Fresca", 5, 0, 40, 0, 3, 
+        comidasDisponiveis.add(new ItemComida("Água Fresca", 5, 0, 40, 0, 5,
             "Água limpa e refrescante"));
-        comidasDisponiveis.add(new ItemComida("Biscoito", 10, 30, 0, 8, 0,
+        comidasDisponiveis.add(new ItemComida("Biscoito", 10, 30, 0, 8, 5,
             "Biscoito crocante que traz alegria"));
             
         // Comidas premium
         comidasDisponiveis.add(new ItemComida("Ração Premium", 25, 25, 5, 15, 5, 
             "Ração de alta qualidade com vitaminas"));
-        comidasDisponiveis.add(new ItemComida("Petisco Gourmet", 30, 15, 0, 25, 10, 
+        comidasDisponiveis.add(new ItemComida("Petisco Gourmet", 30, 45, 0, 25, 10,
             "Petisco especial que deixa muito feliz"));
         comidasDisponiveis.add(new ItemComida("Salmão Fresco", 40, 30, 10, 20, 15, 
             "Salmão nutritivo e delicioso"));

@@ -106,7 +106,6 @@ public class TipoAnimal {
         janela.setVisible(true);
     }
 
-    // Função auxiliar só para carregar a imagem e redimensionar
     private static JLabel carregarImagem(String caminhoImagem) {
         try {
             ImageIcon icone = new ImageIcon(TipoAnimal.class.getResource(caminhoImagem));
@@ -118,7 +117,7 @@ public class TipoAnimal {
         }
     }
 
-    // Função auxiliar para criar botão padrão
+
     private static JButton criarBotao(String texto) {
         JButton botao = new JButton(texto);
         botao.setBackground(new Color(180, 140, 90));
