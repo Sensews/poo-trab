@@ -40,6 +40,9 @@ public class Inventario implements Serializable {
         }
         return null;
     }
+    public void removerComida(ItemComida comida) {
+        comidas.remove(comida);
+    }
     
     public int getQuantidadeTotal() {
         return comidas.size();

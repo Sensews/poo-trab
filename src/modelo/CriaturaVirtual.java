@@ -3,7 +3,7 @@ package modelo;
 import java.util.Scanner;
 import java.util.Random;
 
-public abstract class CriaturaVirtual implements Serializable {
+public abstract class CriaturaVirtual{
     private static final long serialVersionUID = 1L;
     
     protected String nome;
@@ -54,6 +54,22 @@ public abstract class CriaturaVirtual implements Serializable {
         fome = Math.min(100, fome + 30);
         felicidade = Math.min(100, felicidade + 5);
         System.out.println(nome + " foi alimentado! Fome: " + fome);
+        atualizarHumor();
+    }
+    public void alimentar(ItemComida comida) {
+        if (!vivo) {
+            System.out.println(nome + " não pode ser alimentado pois não está vivo.");
+            return;
+        }
+
+        if (fome >= 90) {
+            System.out.println(nome + " não está com fome no momento!");
+            return;
+        }
+
+        aplicarEfeitosComida(comida);
+        System.out.println(nome + " comeu " + comida.getNome() + "!");
+        System.out.println("Efeitos: " + comida.getDescricao());
         atualizarHumor();
     }
 
@@ -343,6 +359,12 @@ public abstract class CriaturaVirtual implements Serializable {
     public void setSaude(int saude) { 
         this.saude = Math.max(0, Math.min(100, saude)); 
         atualizarHumor();
+    }
+    public void aumentarFelicidade(int quantidade) {
+        this.felicidade += quantidade;
+    }
+    public void ganharPontos2(int quantidade) {
+        this.pontos += quantidade;
     }
     public void setPontos(int pontos) { this.pontos = Math.max(0, pontos); }
 }
