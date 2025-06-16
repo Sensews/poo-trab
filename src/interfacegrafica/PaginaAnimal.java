@@ -20,7 +20,7 @@ public class PaginaAnimal extends JFrame {
         this.animal = animal;
 
         setTitle("Tamagotchi - " + animal.getNome());
-        setSize(600, 750);
+        setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -102,6 +102,9 @@ public class PaginaAnimal extends JFrame {
         JButton botaoLoja = criarBotao("LOJA");
         botaoLoja.addActionListener(e -> new PaginaLoja(animal));
 
+        JButton botaoMinigame =  criarBotao("MINIGAME");
+        botaoMinigame.addActionListener(e -> new PaginaDificuldade(animal));
+
 
         // Linha 1
         JPanel linha1 = new JPanel();
@@ -119,9 +122,20 @@ public class PaginaAnimal extends JFrame {
         linha2.add(Box.createRigidArea(new Dimension(20, 0)));
         linha2.add(botaoLoja);
 
+        // Linha 3 → MiniGame (sozinho, centralizado)
+        JPanel linha3 = new JPanel();
+        linha3.setBackground(corFundo);
+        linha3.setLayout(new BoxLayout(linha3, BoxLayout.X_AXIS));
+        linha3.add(Box.createHorizontalGlue());
+        linha3.add(botaoMinigame);
+        linha3.add(Box.createHorizontalGlue());
+
+
         painelBotoes.add(linha1);
         painelBotoes.add(Box.createRigidArea(new Dimension(0, 15)));
         painelBotoes.add(linha2);
+        painelBotoes.add(Box.createRigidArea(new Dimension(0, 15)));
+        painelBotoes.add(linha3);
 
         painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
 

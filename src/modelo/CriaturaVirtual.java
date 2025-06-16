@@ -360,5 +360,11 @@ public abstract class CriaturaVirtual implements Serializable {
         this.saude = Math.max(0, Math.min(100, saude)); 
         atualizarHumor();
     }
+    public void aumentarFelicidade(int quantidade) {
+        this.felicidade += quantidade;
+    }
+    public void ganharPontos2(int quantidade) {
+        this.pontos += quantidade;
+    }
     public void setPontos(int pontos) { this.pontos = Math.max(0, pontos); }
 }
