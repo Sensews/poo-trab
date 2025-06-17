@@ -4,21 +4,29 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * REQUISITO 1: Programa estruturado em classes (Encapsulamento)
+ * REQUISITO 2: Uma das 5+ classes do programa
+ * REQUISITO 3: Classe abstrata
+ * REQUISITO 6: Superclasse para relações de herança
+ */
 public abstract class CriaturaVirtual implements Serializable{
     private static final long serialVersionUID = 1L;
     
-    protected String nome;
-    protected int fome; // 0-100 (0 = com fome, 100 = satisfeito)
-    protected int sede; // 0-100 (0 = com sede, 100 = satisfeito)
-    protected int sono; // 0-100 (0 = cansado, 100 = descansado)
-    protected int felicidade; // 0-100 (0 = triste, 100 = feliz)
-    protected int saude; // 0-100 (0 = doente, 100 = saudável)
-    protected boolean vivo;
-    protected String humor;
-    protected int pontos; // Pontos para comprar na loja
-    protected Inventario inventario;
-    protected boolean doente;
-    protected String tipoDoenca;
+    // REQUISITO 5: Atributos do programa (mais de 10 no total)
+    protected String nome; // Atributo 1
+    protected int fome; // Atributo 2 - 0-100 (0 = com fome, 100 = satisfeito)
+    protected int sede; // Atributo 3 - 0-100 (0 = com sede, 100 = satisfeito)
+    protected int sono; // Atributo 4 - 0-100 (0 = cansado, 100 = descansado)
+    protected int felicidade; // Atributo 5 - 0-100 (0 = triste, 100 = feliz)
+    protected int saude; // Atributo 6 - 0-100 (0 = doente, 100 = saudável)
+    protected boolean vivo; // Atributo 7
+    protected String humor; // Atributo 8
+    protected int pontos; // Atributo 9 - Pontos para comprar na loja
+    // REQUISITO 9: Relação de associação (CriaturaVirtual tem um Inventario)
+    protected Inventario inventario; // Atributo 10
+    protected boolean doente; // Atributo 11
+    protected String tipoDoenca; // Atributo 12
 
     public CriaturaVirtual(String nome) {
         this.nome = nome;
@@ -32,16 +40,20 @@ public abstract class CriaturaVirtual implements Serializable{
         this.inventario = new Inventario();
         this.doente = false;
         this.tipoDoenca = "";
-        atualizarHumor();
-    }
+        atualizarHumor();    }    /**
+     * REQUISITO 4: Métodos abstratos
+     * REQUISITO 6: Métodos para serem implementados pelas subclasses
+     */
+    public abstract void emitirSom(); // Método abstrato 1
+    public abstract String getTipo(); // Método abstrato 2
+    public abstract void habilidadeEspecial(); // Método abstrato 3
 
-    // Métodos abstratos que cada criatura deve implementar
-    public abstract void emitirSom();
-    public abstract String getTipo();
-    public abstract void habilidadeEspecial();
+    /**
+     * REQUISITO 5: Métodos do programa - mais de 10 no total
+     */
 
     // Ações básicas
-    public void alimentar() {
+    public void alimentar() { // Método 1
         if (!vivo) {
             System.out.println(nome + " não pode ser alimentado pois não está vivo.");
             return;
@@ -54,10 +66,10 @@ public abstract class CriaturaVirtual implements Serializable{
         
         fome = Math.min(100, fome + 30);
         felicidade = Math.min(100, felicidade + 5);
-        System.out.println(nome + " foi alimentado! Fome: " + fome);
-        atualizarHumor();
+        System.out.println(nome + " foi alimentado! Fome: " + fome);        atualizarHumor();
     }
-    public void alimentar(ItemComida comida) {
+    
+    public void alimentar(ItemComida comida) { // Método 2
         if (!vivo) {
             System.out.println(nome + " não pode ser alimentado pois não está vivo.");
             return;
@@ -74,7 +86,7 @@ public abstract class CriaturaVirtual implements Serializable{
         atualizarHumor();
     }
 
-    public void alimentar(Scanner scanner) {
+    public void alimentar(Scanner scanner) { // Método 3
         if (!vivo) {
             System.out.println(nome + " não pode ser alimentado pois não está vivo.");
             return;
@@ -143,8 +155,12 @@ public abstract class CriaturaVirtual implements Serializable{
         saude = Math.min(100, saude + 5);
         System.out.println(nome + " dormiu um pouco! Sono: " + sono);
         atualizarHumor();
-    }
-
+    }    /**
+     * REQUISITO 7: Método NÃO-ABSTRATO que pode ser sobrescrito pelas subclasses
+     * Este é o método base para brincar, mas cada animal tem seu comportamento único
+     * É chamado como super.brincar() pelas subclasses antes da implementação específica
+     * IMPORTANTE: Este método demonstra o REQUISITO 7 - método sobrescrito não-abstrato
+     */
     public void brincar() {
         if (!vivo) {
             System.out.println(nome + " não pode brincar pois não está vivo.");
@@ -183,29 +199,31 @@ public abstract class CriaturaVirtual implements Serializable{
             return;
         }
         
-        // Degradação natural dos status (considerando upgrades)
-        fome = Math.max(0, fome - 3);
-        sede = Math.max(0, sede - 4);
+        // Degradação natural com velocidades diferentes para cada atributo
+        fome = Math.max(0, fome - 2); // Fome desce moderadamente
+        sede = Math.max(0, sede - 3); // Sede desce mais rápido (você fica com sede mais rápido)
         
         // Upgrade de Energia Máxima reduz degradação do sono em 50%
-        int degradacaoSono = Loja.temEnergiaMaxima(this) ? 1 : 2;
+        int degradacaoSono = Loja.temEnergiaMaxima(this) ? 1 : 2; // Sono desce mais devagar
         sono = Math.max(0, sono - degradacaoSono);
         
         // Upgrade de Felicidade Eterna mantém felicidade mínima em 30
         if (Loja.temFelicidadeEterna(this)) {
             felicidade = Math.max(30, felicidade - 1);
         } else {
-            felicidade = Math.max(0, felicidade - 1);
+            felicidade = Math.max(0, felicidade - 1); // Felicidade desce devagar
         }
         
         // Se doente, saúde diminui mais rápido
         if (doente) {
-            saude = Math.max(0, saude - 5);
+            saude = Math.max(0, saude - 3); // Saúde desce mais rápido quando doente
         } else {
-            // Chance de ficar doente com upgrade de resistência
-            if (fome < 20 || sede < 20 || sono < 20) {
+            saude = Math.max(0, saude - 1); // Saúde desce devagar quando saudável
+            
+            // Chance de ficar doente com upgrade de resistência (reduzida)
+            if (fome < 15 || sede < 15 || sono < 15) {
                 Random random = new Random();
-                int chanceDoenca = Loja.temResistenciaDoenca(this) ? 3 : 15; // 3% vs 15%
+                int chanceDoenca = Loja.temResistenciaDoenca(this) ? 1 : 5; // 1% vs 5%
                 if (random.nextInt(100) < chanceDoenca) {
                     ficarDoente();
                 }
@@ -233,10 +251,9 @@ public abstract class CriaturaVirtual implements Serializable{
             tipoDoenca = "";
             System.out.println("✅ " + nome + " foi curado da doença!");
         }
-    }
-
-    public void verificarVida() {
-        if (fome <= 0 && sede <= 0 && sono <= 0) {
+    }    public void verificarVida() {
+        // Condições de morte mais tolerantes
+        if ((fome <= 0 && sede <= 0) || (fome <= 0 && sono <= 0) || (sede <= 0 && sono <= 0)) {
             vivo = false;
             humor = "💀 Morto";
             System.out.println("\n💀 " + nome + " morreu por falta de cuidados...");
@@ -322,6 +339,42 @@ public abstract class CriaturaVirtual implements Serializable{
         }
         barra.append("]");
         return barra.toString();
+    }
+
+    /**
+     * REQUISITO 11: Método que usa TamagotchiException para validações críticas
+     * Valida se a criatura pode realizar uma ação
+     */
+    public void validarEstadoCritico() throws TamagotchiException {
+        if (!vivo) {
+            throw new TamagotchiException("Operação inválida: " + nome + " não está vivo!");
+        }
+        
+        if (saude <= 5) {
+            throw new TamagotchiException("Estado crítico: " + nome + " está muito doente (saúde: " + saude + ")!");
+        }
+        
+        if (fome <= 5 && sede <= 5) {
+            throw new TamagotchiException("Estado de emergência: " + nome + " está morrendo de fome e sede!");
+        }
+    }
+
+    /**
+     * REQUISITO 11: Método seguro que valida antes de alimentar
+     */
+    public void alimentarSeguro(ItemComida comida) throws TamagotchiException {
+        if (comida == null) {
+            throw new TamagotchiException("Erro: Tentativa de alimentar com comida nula!");
+        }
+        
+        validarEstadoCritico();
+        
+        if (fome >= 95) {
+            throw new TamagotchiException(nome + " está muito satisfeito e não pode comer mais!");
+        }
+        
+        // Se passou nas validações, alimenta normalmente
+        alimentar(comida);
     }
 
     // Getters

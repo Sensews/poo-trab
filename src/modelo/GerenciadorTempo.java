@@ -12,13 +12,12 @@ public class GerenciadorTempo {
         this.criatura = criatura;
         this.ativo = false;
     }
-    
-    public void iniciar() {
+      public void iniciar() {
         if (ativo) return;
         
         ativo = true;
         timer = new Timer(true); // Timer daemon
-          // Atualização a cada 10 segundos
+        // Atualização a cada 30 segundos (mais lento)
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -28,7 +27,7 @@ public class GerenciadorTempo {
                     criatura.atualizacaoTempo();
                 }
             }
-        }, 10000, 10000); // Primeiro delay de 10s, depois a cada 10s
+        }, 30000, 30000); // Primeiro delay de 30s, depois a cada 30s
         
         System.out.println("⏰ Sistema de tempo automático iniciado!");
     }

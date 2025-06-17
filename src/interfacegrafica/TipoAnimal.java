@@ -5,6 +5,7 @@ import java.awt.*;
 import modelo.Cachorro;
 import modelo.Peixe;
 import modelo.Gato;
+import modelo.PersistenciaCSV;
 
 public class TipoAnimal {
 
@@ -36,13 +37,15 @@ public class TipoAnimal {
 
         JLabel imagemCachorro = Metodos.carregarImagem("imagens/cachorro.png");
         painelCachorro.add(imagemCachorro);
-        painelCachorro.add(Box.createRigidArea(new Dimension(15, 0)));
-
-        JButton botaoCachorro = Metodos.criarBotao("Cachorro");
+        painelCachorro.add(Box.createRigidArea(new Dimension(15, 0)));        JButton botaoCachorro = Metodos.criarBotao("Cachorro");
         botaoCachorro.addActionListener(e -> {
             System.out.println("Animal escolhido: Cachorro | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Cachorro";
             DadosDoJogo.criatura = new Cachorro(DadosDoJogo.nomeTamagotchi);
+            
+            // Salvar automaticamente o novo jogo
+            salvarNovoJogo(DadosDoJogo.criatura);
+            
             new PaginaAnimal(DadosDoJogo.criatura);
             janela.dispose();
         });
@@ -60,13 +63,15 @@ public class TipoAnimal {
 
         JLabel imagemGato = Metodos.carregarImagem("imagens/gato.png");
         painelGato.add(imagemGato);
-        painelGato.add(Box.createRigidArea(new Dimension(15, 0)));
-
-        JButton botaoGato = Metodos.criarBotao("Gato");
+        painelGato.add(Box.createRigidArea(new Dimension(15, 0)));        JButton botaoGato = Metodos.criarBotao("Gato");
         botaoGato.addActionListener(e -> {
             System.out.println("Animal escolhido: Gato | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Gato";
             DadosDoJogo.criatura = new Gato(DadosDoJogo.nomeTamagotchi);
+            
+            // Salvar automaticamente o novo jogo
+            salvarNovoJogo(DadosDoJogo.criatura);
+            
             SwingUtilities.invokeLater(() -> {
                 new PaginaAnimal(DadosDoJogo.criatura);
             });
@@ -86,23 +91,44 @@ public class TipoAnimal {
 
         JLabel imagemPeixe = Metodos.carregarImagem("imagens/peixe.png");
         painelPeixe.add(imagemPeixe);
-        painelPeixe.add(Box.createRigidArea(new Dimension(15, 0)));
-
-        JButton botaoPeixe = Metodos.criarBotao("Peixe");
+        painelPeixe.add(Box.createRigidArea(new Dimension(15, 0)));        JButton botaoPeixe = Metodos.criarBotao("Peixe");
         botaoPeixe.addActionListener(e -> {
             System.out.println("Animal escolhido: Peixe | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Peixe";
             DadosDoJogo.criatura = new Peixe(DadosDoJogo.nomeTamagotchi);
+            
+            // Salvar automaticamente o novo jogo
+            salvarNovoJogo(DadosDoJogo.criatura);
+            
             new PaginaAnimal(DadosDoJogo.criatura);
             janela.dispose();
         });
         painelPeixe.add(botaoPeixe);
 
         painel.add(painelPeixe);
-        painel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        // ==============================
+        painel.add(Box.createRigidArea(new Dimension(0, 20)));        // ==============================
         janela.add(painel);
         janela.setVisible(true);
+    }    /**
+     * REQUISITO 11: Uso da classe derivada de Exception
+     * REQUISITO 14: Salva objetos persistentes
+     */
+    private static void salvarNovoJogo(modelo.CriaturaVirtual criatura) {
+        try {
+            // Usar o gerenciador de saves para criar o caminho
+            String caminhoCompleto = modelo.GerenciadorSaves.gerarCaminhoSave(criatura.getNome(), false);
+            
+            // Salvar automaticamente
+            PersistenciaCSV.salvarParaCSV(criatura, caminhoCompleto);
+            
+            System.out.println("Novo jogo salvo automaticamente: " + caminhoCompleto);
+            
+        } catch (modelo.TamagotchiException e) {
+            System.err.println("Erro ao salvar novo jogo automaticamente: " + e.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(null, 
+                "Erro ao salvar o jogo: " + e.getMessage(),
+                "Erro de Salvamento", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

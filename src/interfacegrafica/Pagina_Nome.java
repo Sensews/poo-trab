@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import modelo.GerenciadorSaves;
 
 public class Pagina_Nome {
     public static void main(String[] args){
@@ -31,14 +32,35 @@ public class Pagina_Nome {
         campoNome.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(180, 140, 90), 2),
                 BorderFactory.createEmptyBorder(8, 10, 8, 10) // Espaço interno
-        ));
-
-
-        JButton botao = Metodos.criarBotao("Confirmar");
+        ));        JButton botao = Metodos.criarBotao("Confirmar");
         botao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DadosDoJogo.nomeTamagotchi = campoNome.getText(); // SALVA O NOME
+                String nome = campoNome.getText().trim();
+                
+                // Validação do nome
+                if (nome.isEmpty()) {
+                    JOptionPane.showMessageDialog(janela, 
+                        "Por favor, digite um nome para o seu Tamagotchi.",
+                        "Nome Vazio", 
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                // Verificar se já existe um save com esse nome
+                if (GerenciadorSaves.saveExiste(nome)) {
+                    int opcao = JOptionPane.showConfirmDialog(janela,
+                        "Já existe um save com o nome '" + nome + "'.\nDeseja sobrescrever?",
+                        "Save Existente",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                    
+                    if (opcao != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+                
+                DadosDoJogo.nomeTamagotchi = nome; // SALVA O NOME
                 TipoAnimal.main(null); // abre a próxima página
                 janela.dispose();
             }

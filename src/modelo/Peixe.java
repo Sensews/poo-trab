@@ -31,8 +31,12 @@ public class Peixe extends CriaturaVirtual {
         setSaude(Math.min(100, getSaude() + 5));
         
         System.out.println("Energia restaurada! Sede saciada! Paz interior alcançada!");
-    }
-
+    }    /**
+     * REQUISITO 7: Método sobrescrito (não abstrato) - DEMONSTRAÇÃO DO REQUISITO 7
+     * Este método mostra o polimorfismo em ação: cada animal tem comportamento único ao brincar
+     * Peixe: Ganha felicidade (+8) gastando pouca energia (-3 sono) de forma tranquila
+     * Este método é chamado na interface e mostra comportamento específico para o usuário
+     */
     @Override
     public void brincar() {
         super.brincar();

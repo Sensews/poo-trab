@@ -118,14 +118,26 @@ public class PaginaInventario extends JFrame {
         painel.add(botaoUsar);
 
         return painel;
-    }
-
+    }    /**
+     * REQUISITO 11: Método que usa TamagotchiException
+     */
     private void usarComida(ItemComida comida) {
-        inventario.removerComida(comida);
-        animal.alimentar(comida);
-        JOptionPane.showMessageDialog(this,
-                "Você usou: " + comida.getNome() + "\nO Tamagotchi foi alimentado!",
-                "Item Usado",
-                JOptionPane.INFORMATION_MESSAGE);
+        try {
+            // Usar o método seguro que valida o estado
+            animal.alimentarSeguro(comida);
+            inventario.removerComida(comida);
+            atualizarInventario();
+            
+            JOptionPane.showMessageDialog(this,
+                    "Você usou: " + comida.getNome() + "\nO Tamagotchi foi alimentado!",
+                    "Item Usado",
+                    JOptionPane.INFORMATION_MESSAGE);
+                    
+        } catch (modelo.TamagotchiException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi possível usar o item:\n" + ex.getMessage(),
+                    "Ação Bloqueada",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
