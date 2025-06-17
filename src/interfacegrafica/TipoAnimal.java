@@ -34,11 +34,11 @@ public class TipoAnimal {
         painelCachorro.setBackground(new Color(245, 241, 230));
         painelCachorro.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel imagemCachorro = carregarImagem("imagens/cachorro.png");
+        JLabel imagemCachorro = Metodos.carregarImagem("imagens/cachorro.png");
         painelCachorro.add(imagemCachorro);
         painelCachorro.add(Box.createRigidArea(new Dimension(15, 0)));
 
-        JButton botaoCachorro = criarBotao("Cachorro");
+        JButton botaoCachorro = Metodos.criarBotao("Cachorro");
         botaoCachorro.addActionListener(e -> {
             System.out.println("Animal escolhido: Cachorro | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Cachorro";
@@ -58,15 +58,15 @@ public class TipoAnimal {
         painelGato.setBackground(new Color(245, 241, 230));
         painelGato.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel imagemGato = carregarImagem("imagens/gato.png");
+        JLabel imagemGato = Metodos.carregarImagem("imagens/gato.png");
         painelGato.add(imagemGato);
         painelGato.add(Box.createRigidArea(new Dimension(15, 0)));
 
-        JButton botaoGato = criarBotao("Gato");
+        JButton botaoGato = Metodos.criarBotao("Gato");
         botaoGato.addActionListener(e -> {
             System.out.println("Animal escolhido: Gato | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Gato";
-            DadosDoJogo.criatura = new Cachorro(DadosDoJogo.nomeTamagotchi);
+            DadosDoJogo.criatura = new Gato(DadosDoJogo.nomeTamagotchi);
             SwingUtilities.invokeLater(() -> {
                 new PaginaAnimal(DadosDoJogo.criatura);
             });
@@ -84,11 +84,11 @@ public class TipoAnimal {
         painelPeixe.setBackground(new Color(245, 241, 230));
         painelPeixe.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel imagemPeixe = carregarImagem("imagens/peixe.png");
+        JLabel imagemPeixe = Metodos.carregarImagem("imagens/peixe.png");
         painelPeixe.add(imagemPeixe);
         painelPeixe.add(Box.createRigidArea(new Dimension(15, 0)));
 
-        JButton botaoPeixe = criarBotao("Peixe");
+        JButton botaoPeixe = Metodos.criarBotao("Peixe");
         botaoPeixe.addActionListener(e -> {
             System.out.println("Animal escolhido: Peixe | Nome: " + DadosDoJogo.nomeTamagotchi);
             DadosDoJogo.tipoTamagotchi = "Peixe";
@@ -104,28 +104,5 @@ public class TipoAnimal {
         // ==============================
         janela.add(painel);
         janela.setVisible(true);
-    }
-
-    private static JLabel carregarImagem(String caminhoImagem) {
-        try {
-            ImageIcon icone = new ImageIcon(TipoAnimal.class.getResource(caminhoImagem));
-            Image imagemReduzida = icone.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-            return new JLabel(new ImageIcon(imagemReduzida));
-        } catch (Exception e) {
-            System.out.println("Imagem não encontrada: " + caminhoImagem);
-            return new JLabel(); // retorna vazio se não achar
-        }
-    }
-
-
-    private static JButton criarBotao(String texto) {
-        JButton botao = new JButton(texto);
-        botao.setBackground(new Color(180, 140, 90));
-        botao.setForeground(Color.WHITE);
-        botao.setFocusPainted(false);
-        botao.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botao.setPreferredSize(new Dimension(150, 40));
-        botao.setMaximumSize(new Dimension(150, 40));
-        return botao;
     }
 }

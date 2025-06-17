@@ -226,7 +226,6 @@ public abstract class CriaturaVirtual{
             System.out.println("\n⚠️  " + nome + " ficou doente com: " + tipoDoenca);
         }
     }
-
     private void curarDoenca() {
         if (doente) {
             doente = false;
