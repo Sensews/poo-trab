@@ -50,18 +50,10 @@ public class PaginaJogo extends JFrame {
         campoResposta.addActionListener(e -> verificarResposta()); // 👈 ENTER chama verificarResposta()
         painel.add(campoResposta, BorderLayout.CENTER);
 
-        JButton botaoConfirmar = new JButton("Confirmar");
-        botaoConfirmar.setBackground(corBotao);
-        botaoConfirmar.setForeground(Color.WHITE);
-        botaoConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botaoConfirmar.setFocusPainted(false);
+        JButton botaoConfirmar = Metodos.criarBotao("Confirmar");
         botaoConfirmar.addActionListener(e -> verificarResposta());
 
-        JButton botaoComecar = new JButton("▶ Começar");
-        botaoComecar.setBackground(corBotao);
-        botaoComecar.setForeground(Color.WHITE);
-        botaoComecar.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botaoComecar.setFocusPainted(false);
+        JButton botaoComecar = Metodos.criarBotao("▶ Começar");
         botaoComecar.addActionListener(e -> mostrarProximaPalavra());
 
         JPanel painelBotoes = new JPanel(new GridLayout(1, 2, 10, 10));

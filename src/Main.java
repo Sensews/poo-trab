@@ -1,3 +1,4 @@
+import interfacegrafica.Janela_Bem_Vindo;
 import modelo.JogoTamagochi;
 
 public class Main {
@@ -5,5 +6,6 @@ public class Main {
         //List<CriaturaVirtual> criaturas = ImportadorTXT.importarDeTXT("criatura.txt");
         JogoTamagochi jogo = new JogoTamagochi();
         jogo.iniciarJogo();
+        Janela_Bem_Vindo.inicializarInterface();
     }
 }

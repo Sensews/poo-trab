@@ -57,13 +57,7 @@ public class PaginaLoja extends JFrame {
 
         carregarItens();
 
-        // --- Botão SAIR ---
-        JButton botaoSair = new JButton("SAIR");
-        botaoSair.setBackground(new Color(150, 110, 70));
-        botaoSair.setForeground(Color.WHITE);
-        botaoSair.setFocusPainted(false);
-        botaoSair.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botaoSair.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton botaoSair = Metodos.criarBotao("SAIR");
         botaoSair.addActionListener(e -> dispose());
 
         painelItens.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -95,10 +89,7 @@ public class PaginaLoja extends JFrame {
             descricao.setEditable(false);
             descricao.setBackground(new Color(240, 225, 200));
 
-            JButton botaoComprar = new JButton("Comprar");
-            botaoComprar.setBackground(new Color(150, 110, 70));
-            botaoComprar.setForeground(Color.WHITE);
-            botaoComprar.setFocusPainted(false);
+            JButton botaoComprar = Metodos.criarBotao("Comprar");
             botaoComprar.addActionListener((ActionEvent e) -> comprarComida(comida));
 
             itemPanel.add(nomeComida, BorderLayout.NORTH);
