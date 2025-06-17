@@ -160,6 +160,7 @@ public class JogoTamagochi {
                 break;
             case 0:
                 System.out.println("Salvando jogo...");
+                Persistencia.salvarCriatura(criatura, "criatura.dat");
                 jogoAtivo = false;
                 break;
             default:

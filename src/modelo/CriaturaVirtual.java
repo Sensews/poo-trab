@@ -1,9 +1,10 @@
 package modelo;
 
-import java.util.Scanner;
+import java.io.Serializable;
 import java.util.Random;
+import java.util.Scanner;
 
-public abstract class CriaturaVirtual{
+public abstract class CriaturaVirtual implements Serializable{
     private static final long serialVersionUID = 1L;
     
     protected String nome;
