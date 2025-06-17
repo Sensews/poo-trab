@@ -1,7 +1,5 @@
 package interfacegrafica;
 
-import modelo.CriaturaVirtual;
-
 import javax.swing.*;
 import java.awt.*;
 
