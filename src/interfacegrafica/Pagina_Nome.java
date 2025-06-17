@@ -34,16 +34,7 @@ public class Pagina_Nome {
         ));
 
 
-        JButton botao = new JButton("Confirmar");
-        botao.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botao.setBackground(new Color(180, 140, 90));
-        botao.setForeground(Color.WHITE);
-        botao.setFocusPainted(false);
-        botao.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        botao.setPreferredSize(new Dimension(150, 45));
-        botao.setMaximumSize(new Dimension(200, 50));
-        botao.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
+        JButton botao = Metodos.criarBotao("Confirmar");
         botao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

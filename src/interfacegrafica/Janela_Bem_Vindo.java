@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Janela_Bem_Vindo {
-    public static void main(String []args){
+    public static void inicializarInterface(){
         JFrame janela = new JFrame("Tamagotchi - Bem-vindo");
         janela.setSize(600, 500);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,14 +44,7 @@ public class Janela_Bem_Vindo {
         painel.add(labelDescricao);
         painel.add(Box.createVerticalGlue()); // empurra o botão pra parte de baixo
 
-        JButton botao = new JButton("Iniciar");
-        botao.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botao.setBackground(new Color(180, 140, 90));
-        botao.setForeground(Color.WHITE);
-        botao.setFocusPainted(false);
-        botao.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        botao.setPreferredSize(new Dimension(100, 35));
-        botao.setMaximumSize(new Dimension(150, 50));
+        JButton botao = Metodos.criarBotao("Iniciar");
         botao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,5 +56,8 @@ public class Janela_Bem_Vindo {
         painel.add(botao);
         janela.add(painel);
         janela.setVisible(true);
+    }
+    public static void main(String[] args) {
+        inicializarInterface();
     }
 }
