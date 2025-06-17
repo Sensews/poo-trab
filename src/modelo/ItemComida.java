@@ -2,14 +2,21 @@ package modelo;
 
 import java.io.Serializable;
 
+/**
+ * REQUISITO 1: Programa estruturado em classes (Encapsulamento)
+ * REQUISITO 2: Uma das 5+ classes do programa
+ * REQUISITO 9: Classe que participa de relação de associação (é usada pelo Inventario)
+ * REQUISITO 10: Objetos desta classe são armazenados em coleções
+ */
 public class ItemComida implements Serializable {
-    private String nome;
-    private int preco;
-    private int efeitoFome;
-    private int efeitoSede;
-    private int efeitoFelicidade;
-    private int efeitoSaude;
-    private String descricao;
+    // REQUISITO 5: Mais atributos do programa
+    private String nome; // Atributo 13
+    private int preco; // Atributo 14
+    private int efeitoFome; // Atributo 15
+    private int efeitoSede; // Atributo 16
+    private int efeitoFelicidade; // Atributo 17
+    private int efeitoSaude; // Atributo 18
+    private String descricao; // Atributo 19
     
     public ItemComida(String nome, int preco, int efeitoFome, int efeitoSede, int efeitoFelicidade, int efeitoSaude, String descricao) {
         this.nome = nome;

@@ -4,19 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * REQUISITO 1: Programa estruturado em classes (Encapsulamento)
+ * REQUISITO 2: Uma das 5+ classes do programa
+ * REQUISITO 9: Classe que participa de relação de associação com CriaturaVirtual
+ * REQUISITO 10: Contém coleção de objetos (ArrayList)
+ */
 public class Inventario implements Serializable {
-    private List<ItemComida> comidas;
+    // REQUISITO 10: Coleção de objetos - ArrayList de ItemComida
+    private List<ItemComida> comidas; // Atributo que é uma coleção
     
     public Inventario() {
-        comidas = new ArrayList<>();
+        comidas = new ArrayList<>(); // Inicialização da coleção
     }
     
     public void adicionarComida(ItemComida comida) {
-        comidas.add(comida);
+        comidas.add(comida); // Uso da coleção
     }
     
     public boolean temComidas() {
-        return !comidas.isEmpty();
+        return !comidas.isEmpty(); // Operação na coleção
     }
     
     public void mostrarComidas() {

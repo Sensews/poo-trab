@@ -105,7 +105,7 @@ public class PaginaJogo extends JFrame {
     }
 
     private void fimDoJogo() {
-        int recompensa = pontos * (dificuldade + 1);
+        int recompensa = pontos * (dificuldade + 2);
         animal.ganharPontos(recompensa);
 
         JOptionPane.showMessageDialog(this,
