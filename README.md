@@ -30,7 +30,7 @@ O jogo permite que você:
 - 🎾 **Brinque** e interaja com diferentes animais
 - 💤 **Cuide** da saúde, sono e felicidade
 - 🏪 **Compre** itens e upgrades na loja
-- 🎮 **Jogue** minigames para ganhar pontos
+- 🎮 **Jogue** um minigame para ganhar pontos
 - 💾 **Salve** e carregue seu progresso
 
 ---
