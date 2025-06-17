@@ -35,6 +35,10 @@ public class PaginaAnimal extends JFrame {
     private JProgressBar barraSaude; // Atributo 25
     private JLabel labelHumor; // Atributo 26
     private JLabel labelDoenca; // Atributo 27
+    
+    // Sistema de cooldown para habilidade especial
+    private boolean habilidadeEmCooldown = false;
+    private JButton botaoHabilidade;
 
     public PaginaAnimal(CriaturaVirtual animal) {
         this.animal = animal;
@@ -59,14 +63,11 @@ public class PaginaAnimal extends JFrame {
         // Painel para a imagem do animal
         JPanel painelImagem = new JPanel();
         painelImagem.setBackground(corFundo);
-        painelImagem.setLayout(new BoxLayout(painelImagem, BoxLayout.Y_AXIS));
-
-        String caminhoImagem = getCaminhoImagem();
+        painelImagem.setLayout(new BoxLayout(painelImagem, BoxLayout.Y_AXIS));        String caminhoImagem = getCaminhoImagem();
         if (caminhoImagem != null) {
             try {
-                ImageIcon icone = new ImageIcon(getClass().getClassLoader().getResource(caminhoImagem));
-                Image imagem = icone.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-                JLabel labelImagem = new JLabel(new ImageIcon(imagem));
+                // Usar o mesmo método que funciona em outras partes do código
+                JLabel labelImagem = Metodos.carregarImagem(caminhoImagem);
                 labelImagem.setAlignmentX(Component.CENTER_ALIGNMENT);
                 painelImagem.add(labelImagem);
             } catch (Exception e) {
@@ -147,12 +148,18 @@ public class PaginaAnimal extends JFrame {
 
         JButton botaoLoja = Metodos.criarBotao("LOJA");
         botaoLoja.addActionListener(e -> new PaginaLoja(animal));        JButton botaoMinigame = Metodos.criarBotao("MINIGAME");
-        botaoMinigame.addActionListener(e -> new PaginaDificuldade(animal));
-
-        // REQUISITO 4: Botão que demonstra método abstrato implementado
+        botaoMinigame.addActionListener(e -> new PaginaDificuldade(animal));        // REQUISITO 4: Botão que demonstra método abstrato implementado
         // Cada animal tem uma habilidade especial única
-        JButton botaoHabilidade = Metodos.criarBotao("HABILIDADE ESPECIAL");
+        botaoHabilidade = Metodos.criarBotao("HABILIDADE ESPECIAL");
         botaoHabilidade.addActionListener(e -> {
+            if (habilidadeEmCooldown) {
+                JOptionPane.showMessageDialog(this,
+                    "A habilidade especial está em cooldown!\nAguarde um pouco antes de usar novamente.",
+                    "Cooldown Ativo",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             try {
                 animal.validarEstadoCritico();
                 if (verificarSeEstaVivo()) {
@@ -166,6 +173,9 @@ public class PaginaAnimal extends JFrame {
                         mensagemHabilidade,
                         "Habilidade Especial de " + animal.getNome() + "!",
                         JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // Ativar cooldown de 30 segundos
+                    iniciarCooldownHabilidade();
                 }
             } catch (modelo.TamagotchiException ex) {
                 JOptionPane.showMessageDialog(this,
@@ -263,9 +273,7 @@ public class PaginaAnimal extends JFrame {
             default -> 
                 animal.getNome() + " brincou e se divertiu!";
         };
-    }
-
-    /**
+    }    /**
      * REQUISITO 4: Método que demonstra o uso de métodos abstratos implementados
      * Retorna mensagens específicas da habilidade especial de cada animal
      * Mostra a implementação única de cada subclasse
@@ -276,20 +284,23 @@ public class PaginaAnimal extends JFrame {
             case "Cachorro" -> 
                 "🐕 " + animal.getNome() + " está abanando o rabo e saltitando de alegria!\n" +
                 "A energia contagiante do cachorro espalha felicidade!\n" +
-                "Bonus: +15 felicidade, +10 sono, +5 pontos!";
+                "Bonus: +15 felicidade, +10 sono, +5 pontos!\n\n" +
+                "⏰ Habilidade em cooldown por 30 segundos.";
                 
             case "Gato" -> 
-                "🐈 " + animal.getNome() + " está ronronando em tranquilidade zen!\n" +
-                "A sabedoria felina traz equilíbrio e cura!\n" +
-                "Bonus: +20 saúde, +15 felicidade, cura de doenças!";
+                "🐈 " + animal.getNome() + " está se lambendo e ronronando em tranquilidade!\n" +
+                "Gatos são naturalmente higiênicos e cuidam da própria saúde!\n" +
+                "Bonus: +5 saúde, +8 felicidade!\n\n" +
+                "⏰ Habilidade em cooldown por 30 segundos.";
                 
             case "Peixe" -> 
-                "🐟 " + animal.getNome() + " nada em círculos meditativos!\n" +
+                "🐟 " + animal.getNome() + " está nadando em movimentos zen e relaxantes!\n" +
                 "A tranquilidade do peixe traz paz e restaura a energia!\n" +
-                "Bonus: +15 sono, sede saciada, +10 felicidade, +5 saúde!";
+                "Bonus: +15 sono, sede saciada, +10 felicidade, +5 saúde!\n\n" +
+                "⏰ Habilidade em cooldown por 30 segundos.";
                 
             default -> 
-                animal.getNome() + " usou sua habilidade especial!";
+                animal.getNome() + " usou sua habilidade especial!\n\n⏰ Cooldown ativo por 30 segundos.";
         };
     }
 
@@ -338,6 +349,33 @@ public class PaginaAnimal extends JFrame {
 
     private Component criarEspacamentoVertical(int altura) {
         return Box.createRigidArea(new Dimension(0, altura));
+    }    /**
+     * Sistema de cooldown para habilidade especial
+     * Previne uso excessivo da habilidade especial
+     */
+    private void iniciarCooldownHabilidade() {
+        habilidadeEmCooldown = true;
+        botaoHabilidade.setEnabled(false);
+        
+        // Timer para atualizar o texto da contagem regressiva a cada segundo
+        Timer contadorTimer = new Timer(1000, null);
+        final int[] tempoRestante = {30}; // Array para poder modificar dentro do ActionListener
+        
+        contadorTimer.addActionListener(e -> {
+            tempoRestante[0]--;
+            botaoHabilidade.setText("COOLDOWN (" + tempoRestante[0] + "s)");
+            
+            if (tempoRestante[0] <= 0) {
+                contadorTimer.stop();
+                habilidadeEmCooldown = false;
+                botaoHabilidade.setText("HABILIDADE ESPECIAL");
+                botaoHabilidade.setEnabled(true);
+            }
+        });
+        
+        // Iniciar com o texto inicial
+        botaoHabilidade.setText("COOLDOWN (30s)");
+        contadorTimer.start();
     }
 
     private void atualizarBarras() {
