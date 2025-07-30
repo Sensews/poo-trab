@@ -32,7 +32,6 @@ public class PaginaJogo extends JFrame {
         configurarPalavras();
 
         Color corFundo = new Color(245, 241, 230);
-        Color corBotao = new Color(150, 110, 90);
         Color corTexto = new Color(70, 60, 50);
 
         JPanel painel = new JPanel(new BorderLayout(15, 15));
